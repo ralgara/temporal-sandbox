@@ -53,6 +53,9 @@ class WikipediaPageviews:
                 # non_retryable_error_types=["ValueError"],
             )
         )
+        print('oh no!')
+        print('art', articles)
+
         filtered_articles = await workflow.execute_activity(
             "filter_articles", 
             articles, 

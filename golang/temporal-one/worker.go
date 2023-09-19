@@ -23,7 +23,7 @@ func main() {
     log.Fatalln("Unable to create Temporal Client", err)
   }
   defer temporalClient.Close()
-  w := worker.New(temporalClient, "wikipedia-pageviews-queue", worker.Options{})
+  w := worker.New(temporalClient, "wikipedia-pageviews-queue", worker.Options{DisableWorkflowWorker: true})
 
   opt := activity.RegisterOptions{
     Name: "filter_articles",
@@ -32,18 +32,14 @@ func main() {
     filter_articles, 
     opt,
   )
-  w.RegisterWorkflow(WikipediaPageviews)
+  //w.RegisterWorkflow(WikipediaPageviews)
   err = w.Run(worker.InterruptCh())
   if err != nil {
       log.Fatalln("Unable to start Worker", err)
   }
 }
 
-func filter_articles(ctx context.Context, articles[] string) ([]string, error) {
-  var output []string
-  for _, article := range articles {
-    articles = append(output, article + "@foo")
-  }
+func filter_articles(ctx context.Context, articles interface{}) (interface{}, error) {
   return articles, nil
 }
 
