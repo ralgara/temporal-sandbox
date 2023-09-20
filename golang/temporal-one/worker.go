@@ -23,7 +23,7 @@ func main() {
     log.Fatalln("Unable to create Temporal Client", err)
   }
   defer temporalClient.Close()
-  w := worker.New(temporalClient, "wikipedia-pageviews-queue", worker.Options{DisableWorkflowWorker: true})
+  w := worker.New(temporalClient, "wikipedia-pageviews-queue-golang", worker.Options{DisableWorkflowWorker: true})
 
   opt := activity.RegisterOptions{
     Name: "filter_articles",
