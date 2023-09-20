@@ -4,18 +4,8 @@ from temporalio import activity, workflow
 from temporalio.client import Client
 from temporalio.worker import Worker
 
-from activities import get_pageviews, get_article, say_hello, square, increment, halve
-from workflows import WikipediaPageviews, SayHello, Transform
-
-async def main_transform():
-    client = await Client.connect("localhost:7233", namespace="default")
-    worker = Worker(
-        client, 
-        task_queue="transform-queue", 
-        workflows=[Transform], 
-        activities=[square, increment, halve]
-    )
-    await worker.run()
+from activities import get_pageviews, get_article 
+from workflows import WikipediaPageviews
 
 async def main_wikipedia():
     print("Starting main_wikipedia worker")
@@ -31,7 +21,5 @@ async def main_wikipedia():
 
 
 if __name__ == "__main__":
-    #asyncio.run(main_hello())
     asyncio.run(main_wikipedia())
-    #asyncio.run(main_transform())
             
