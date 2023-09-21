@@ -29,3 +29,5 @@ hs_err_pid*
 **/python/pageviews.db
 **/python/cache/*
 .lsp/.cache/db.transit.json
+client-cert.pem
+client-private-key.pem
