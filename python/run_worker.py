@@ -11,7 +11,7 @@ from activities import *
 from workflows import *
 
 async def main():
-    print(f"Starting activity worker [{os.environ['TEMPORAL_WORKER_ROLE']}]")
+    print(f"Starting worker [{os.environ['TEMPORAL_WORKER_ROLE']}]")
     client = await Client.connect("localhost:7233", namespace="default")
 
     # with open("/Users/ralgara/code/temporal-sandbox/client-cert.pem", "rb") as certFile:

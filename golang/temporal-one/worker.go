@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"go.temporal.io/sdk/activity"
@@ -18,7 +19,7 @@ func main() {
 		log.Fatalln("Unable to create Temporal Client", err)
 	}
 	defer temporalClient.Close()
-	w := worker.New(temporalClient, "wikipedia-pageviews-filter",
+	w := worker.New(temporalClient, "wikipedia-filter",
 		worker.Options{
 			DisableWorkflowWorker: true,
 		},
@@ -30,17 +31,28 @@ func main() {
 			Name: "filter_articles",
 		},
 	)
-	//w.RegisterWorkflow(WikipediaPageviews)
+
 	err = w.Run(worker.InterruptCh())
 	if err != nil {
 		log.Fatalln("Unable to start Worker", err)
 	}
 }
 
-func filter_articles(ctx context.Context, articles []string) ([]string, error) {
-	var output []string
-	for _, article := range articles {
-		articles = append(output, article+"@foo")
+func filter_articles(ctx context.Context, input []map[string]interface{}) ([]map[string]interface{}, error) {
+	// metapages = [
+	// 	""
+	// ]
+	fmt.Println(fmt.Sprintf("%v", input))
+	for index, element := range input {
+		fmt.Println(fmt.Sprintf("%v, %v", index, element))
+		element["foo"] = "bar"
 	}
-	return articles, nil
+	// if err != nil {
+	// 	log.Fatalln("Could not unmarshal")
+	// }
+	// var output []string
+	// for _, article := range articles {
+	// 	articles = append(output, article+"@foo")
+	// }
+	return input, nil
 }

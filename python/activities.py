@@ -7,7 +7,7 @@ import datetime
 import pdb
 
 @activity.defn
-async def get_pageviews(date: str) -> list:
+async def get_pageviews(date: str) -> list[dict]:
     print(f"get_pageviews({date})")
     url_prefix = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/"
     url = url_prefix + date.replace('-','/')

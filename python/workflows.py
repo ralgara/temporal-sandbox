@@ -19,13 +19,13 @@ class WikipediaPageviews:
         )
         print(articles)
         filtered_articles = await workflow.execute_activity(
-            filter_articles, #"filter_articles", 
+            "filter_articles", 
             articles,
             task_queue = "wikipedia-filter",
             start_to_close_timeout=timedelta(seconds=10)    
         )
         for article in filtered_articles:
-            print(f"article: {article}")
+            print(f"article: [{article}")
             workflow.start_activity(
                 get_article, 
                 article['article'],
