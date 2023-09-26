@@ -16,6 +16,10 @@ async def get_pageviews(date: str) -> list:
     doc = json.loads(cached_download(path, url))
     return doc['items'][0]['articles'][:10]
 
+@activity.defn
+async def filter_articles(articles: list[dict]) -> list:
+    print(f"filter_articles()")
+    return articles[:10]
 
 @activity.defn
 async def get_article(title: str) -> str:

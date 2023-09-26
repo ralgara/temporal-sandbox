@@ -30,7 +30,7 @@ async def main_wikipedia():
             WikipediaPageviews.run,
             date,
             id = id,
-            task_queue="wikipedia-pageviews-queue"
+            task_queue="wikipedia-pageviews"
         )
 
         print(f"Finished running workflow {id}")

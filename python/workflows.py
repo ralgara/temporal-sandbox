@@ -4,7 +4,7 @@ from temporalio.common import RetryPolicy
 
 # Import activity, passing it through the sandbox without reloading the module
 with workflow.unsafe.imports_passed_through():
-    from activities import get_pageviews, get_article
+    from activities import *
     
 @workflow.defn
 class WikipediaPageviews:
@@ -13,32 +13,24 @@ class WikipediaPageviews:
         print(f"WikipediaPageviews.run({date})")
         articles = await workflow.execute_activity(
             get_pageviews, 
-            date, 
-            start_to_close_timeout=timedelta(seconds=10),
-            retry_policy=RetryPolicy(
-                maximum_attempts=1,
-                # non_retryable_error_types=["ValueError"],
-            )
+            date,
+            task_queue = "wikipedia-pageviews",
+            start_to_close_timeout=timedelta(seconds=10)
         )
+        print(articles)
         filtered_articles = await workflow.execute_activity(
-            "filter_articles", 
-            articles, 
-            start_to_close_timeout=timedelta(seconds=10),
-            retry_policy=RetryPolicy(
-                maximum_attempts=1,
-                # non_retryable_error_types=["ValueError"],
-            )            
+            filter_articles, #"filter_articles", 
+            articles,
+            task_queue = "wikipedia-filter",
+            start_to_close_timeout=timedelta(seconds=10)    
         )
         for article in filtered_articles:
             print(f"article: {article}")
             workflow.start_activity(
                 get_article, 
-                article['article'], 
-                start_to_close_timeout=timedelta(seconds=10),
-                retry_policy=RetryPolicy(
-                    maximum_attempts=1,
-                    # non_retryable_error_types=["ValueError"],
-                )
+                article['article'],
+                task_queue = "wikipedia-article",
+                start_to_close_timeout=timedelta(seconds=10)
             )
         return "Done"
         

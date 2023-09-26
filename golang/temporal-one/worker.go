@@ -2,14 +2,10 @@ package main
 
 import (
 	"context"
-	// "encoding/json"
 	"log"
-	// "net/http"
-	// "time"
-	// "fmt"
-	"go.temporal.io/sdk/client"
-	// "go.temporal.io/sdk/temporal"
+
 	"go.temporal.io/sdk/activity"
+	"go.temporal.io/sdk/client"
 	"go.temporal.io/sdk/worker"
 )
 
@@ -22,18 +18,17 @@ func main() {
 		log.Fatalln("Unable to create Temporal Client", err)
 	}
 	defer temporalClient.Close()
-	w := worker.New(temporalClient, "wikipedia-pageviews-queue",
+	w := worker.New(temporalClient, "wikipedia-pageviews-filter",
 		worker.Options{
 			DisableWorkflowWorker: true,
 		},
 	)
 
-	opt := activity.RegisterOptions{
-		Name: "filter_articles",
-	}
 	w.RegisterActivityWithOptions(
 		filter_articles,
-		opt,
+		activity.RegisterOptions{
+			Name: "filter_articles",
+		},
 	)
 	//w.RegisterWorkflow(WikipediaPageviews)
 	err = w.Run(worker.InterruptCh())
