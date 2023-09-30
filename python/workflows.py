@@ -5,6 +5,7 @@ from temporalio.common import RetryPolicy
 # Import activity, passing it through the sandbox without reloading the module
 with workflow.unsafe.imports_passed_through():
     from activities import *
+    from time import *
     
 @workflow.defn
 class WikipediaPageviews:
@@ -17,7 +18,6 @@ class WikipediaPageviews:
             task_queue = "wikipedia-pageviews",
             start_to_close_timeout=timedelta(seconds=10)
         )
-        print(articles)
         filtered_articles = await workflow.execute_activity(
             "filter_articles", 
             articles,
@@ -26,11 +26,14 @@ class WikipediaPageviews:
         )
         for article in filtered_articles:
             print(f"article: [{article}")
-            workflow.start_activity(
+            snippet = await workflow.start_activity(
                 get_article, 
                 article['article'],
                 task_queue = "wikipedia-article",
                 start_to_close_timeout=timedelta(seconds=10)
             )
-        return "Done"
+        return {
+            "status": "complete",
+            "articles": filtered_articles
+        }
         
