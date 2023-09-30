@@ -12,7 +12,7 @@ async def get_pageviews(date: str) -> list[dict]:
     url_prefix = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/"
     url = url_prefix + date.replace('-','/')
     path = f"pageviews/{date.replace('-','')}"
-    print(activity.info())
+    #print(activity.info())
     doc = json.loads(cached_download(path, url))
     return doc['items'][0]['articles'][:10]
 
@@ -26,6 +26,7 @@ async def get_article(title: str) -> str:
         "rvprop=content&" + \
         "formatversion=2&" + \
         "format=json"
+    print(f"get_article({title}): {url}")
 
     headers = {
         'User-Agent': 'ralgara@gmail.com'
@@ -33,7 +34,7 @@ async def get_article(title: str) -> str:
     path = f"articles/{title}"
     content = cached_download(path, url)
     doc = json.loads(content)
-    return content[:500]
+    return json.dumps(doc['query']['pages'][0])[:250]
 
 
 
