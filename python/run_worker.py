@@ -33,7 +33,7 @@ async def main():
             )
         elif os.environ['TEMPORAL_WORKER_ROLE'] == 'article':
             queue="wikipedia-article"
-            print(f"Starting pageviews worker [{queue}]")
+            print(f"Starting article.v4 worker [{queue}]")
             w = Worker(
                 client, 
                 task_queue=queue,
