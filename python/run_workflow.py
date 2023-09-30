@@ -1,9 +1,7 @@
 import asyncio
 import datetime
 
-from run_worker import SayHello
 from run_worker import WikipediaPageviews
-from run_worker import Transform
 
 from temporalio.client import Client
 
@@ -25,7 +23,7 @@ async def main_wikipedia():
 
         result = await client.execute_workflow(
             WikipediaPageviews.run,
-            date,
+            str(date),
             id = id,
             task_queue="wikipedia-pageviews"
         )

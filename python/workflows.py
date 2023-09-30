@@ -10,7 +10,7 @@ with workflow.unsafe.imports_passed_through():
 @workflow.defn
 class WikipediaPageviews:
     @workflow.run
-    async def run(self, date: str) -> str:
+    async def run(self, date: str) -> dict:
         print(f"WikipediaPageviews.run({date})")
         articles = await workflow.execute_activity(
             get_pageviews, 
