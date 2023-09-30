@@ -26,7 +26,7 @@ def cached_download(path: str, url: str) -> bool:
                 cache_file.write(req.text)
             print("Download cached")  
         else:
-            raise Exception("Unable to download")
+            raise Exception(f"Unable to download [({req.status_code}) {req.text}]")
 
     with open(cache_path, 'r') as cache_file:
         print(f"Reading from filesystem: {cache_path}")
