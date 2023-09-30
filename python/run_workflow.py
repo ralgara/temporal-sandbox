@@ -13,14 +13,11 @@ async def get_client():
 
 async def main_wikipedia():
     client = await get_client()
-    start_date = datetime.datetime.today()
-    for i in range(4):
+    date = datetime.date(2023,9,1) #datetime.datetime.today()
+    NDATES=10
+    for i in range(NDATES):
         
-        date = str(
-            (
-                start_date - datetime.timedelta(days=i+7)
-            ).date()
-        )
+        date += datetime.timedelta(days=1)
 
         print(f"Starting workflow {date}")
 
