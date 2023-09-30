@@ -38,21 +38,29 @@ func main() {
 	}
 }
 
+type ArticleMetadata struct {
+	Type  string
+	Flags string
+}
+
 func filter_articles(ctx context.Context, input []map[string]interface{}) ([]map[string]interface{}, error) {
-	// metapages = [
-	// 	""
-	// ]
-	fmt.Println(fmt.Sprintf("%v", input))
-	for index, element := range input {
-		fmt.Println(fmt.Sprintf("%v, %v", index, element))
-		element["foo"] = "bar"
+	article_metadata := map[string]string{
+		"Main_Page":      "meta",
+		"Special:Search": "meta",
 	}
-	// if err != nil {
-	// 	log.Fatalln("Could not unmarshal")
-	// }
-	// var output []string
-	// for _, article := range articles {
-	// 	articles = append(output, article+"@foo")
-	// }
-	return input, nil
+	var output []map[string]interface{}
+	arank := 1 // adjusted rank: rank of an article ignoring meta pages
+	for _, article := range input {
+		_, is_meta := article_metadata[article["article"].(string)]
+		if is_meta {
+			fmt.Printf("Drop [%v]\n", article["article"])
+			continue
+		} else {
+			article["arank"] = arank
+			fmt.Printf("Add [%v]\n", article["article"])
+			arank++
+			output = append(output, article)
+		}
+	}
+	return output, nil
 }

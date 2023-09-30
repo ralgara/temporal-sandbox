@@ -17,13 +17,7 @@ async def get_pageviews(date: str) -> list[dict]:
     return doc['items'][0]['articles'][:10]
 
 @activity.defn
-async def filter_articles(articles: list[dict]) -> list:
-    print(f"filter_articles()")
-    return articles[:10]
-
-@activity.defn
 async def get_article(title: str) -> str:
-    print(f"get_article({title})")
     url = "https://en.wikipedia.org/w/api.php?" + \
         "action=query&" + \
         "prop=revisions&" + \
