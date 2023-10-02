@@ -29,16 +29,19 @@ async def main():
                 client, 
                 task_queue = queue,
                 workflows = None,
-                activities = [get_pageviews]
+                activities = [get_pageviews],
+                #max_activities_per_second = 3
             )
         elif os.environ['TEMPORAL_WORKER_ROLE'] == 'article':
             queue="wikipedia-article"
-            print(f"Starting article.v4 worker [{queue}]")
+            print(f"Starting article worker [{queue}]")
             w = Worker(
                 client, 
                 task_queue=queue,
                 workflows = None,
-                activities=[get_article])
+                activities=[get_article],
+                #max_activities_per_second = 3
+            )
         elif os.environ['TEMPORAL_WORKER_ROLE'] == 'filter':
             queue="wikipedia-filter"
             print(f"Starting filter worker [{queue}]")
@@ -46,7 +49,7 @@ async def main():
                 client, 
                 task_queue=queue,
                 workflows = None,
-                activities=[filter_articles])            
+                activities=[filter_articles])
         elif os.environ['TEMPORAL_WORKER_ROLE'] == 'workflow':
             queue="wikipedia-pageviews"
             print(f"Starting pageviews workflow [{queue}]")

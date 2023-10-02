@@ -11,8 +11,8 @@ async def get_client():
 
 async def main_wikipedia():
     client = await get_client()
-    date = datetime.date(2023,9,1) #datetime.datetime.today()
-    NDATES=10
+    date = datetime.date(2019,1,1) #datetime.datetime.today()
+    NDATES=365
     for i in range(NDATES):
         
         date += datetime.timedelta(days=1)

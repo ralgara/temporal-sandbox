@@ -1,5 +1,6 @@
 import os
 import requests
+import time
 import sqlite3
 
 def get_cursor():
@@ -20,6 +21,7 @@ def cached_download(path: str, url: str) -> bool:
         headers = {
             'User-Agent': 'ralgara@gmail.com'
         }
+        time.sleep(0.5)
         req = requests.request("GET", url, headers=headers)
         if req.ok:
             with open(cache_path, 'w') as cache_file:
