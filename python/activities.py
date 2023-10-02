@@ -32,7 +32,10 @@ async def get_article(title: str) -> str:
         'User-Agent': 'ralgara@gmail.com'
     }
     path = f"articles/{title}"
-    content = cached_download(path, url)
+    try:
+        content = cached_download(path, url)
+    except Exception as e:
+        return str(e)
     doc = json.loads(content)
     return json.dumps(doc['query']['pages'][0])[:250]
 
