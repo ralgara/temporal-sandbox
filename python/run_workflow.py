@@ -11,19 +11,21 @@ async def get_client():
 
 async def main_wikipedia():
     client = await get_client()
-    date = datetime.date(2019,1,1) #datetime.datetime.today()
-    NDATES=365
-    for i in range(NDATES):
-        
-        date += datetime.timedelta(days=1)
+    start_date = datetime.date(2015,1,1)
+    end_date = datetime.date(2023,10,4)
+    date_range = [
+        datetime.date(2015,1,1) + datetime.timedelta(days=x) 
+        for x in range(0, (end_date - start_date).days)
+    ]
+    for d in date_range:
 
-        print(f"Starting workflow {date}")
+        print(f"Starting workflow {d}")
 
-        id = f"wikipedia-pageviews-{date}"
+        id = f"wikipedia-pageviews-{d}"
 
         result = await client.execute_workflow(
             WikipediaPageviews.run,
-            str(date),
+            str(d),
             id = id,
             task_queue="wikipedia-pageviews"
         )
