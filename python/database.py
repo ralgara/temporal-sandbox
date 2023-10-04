@@ -3,6 +3,13 @@ import requests
 import time
 import sqlite3
 
+class DownloadError(RuntimeError):
+    def __init__(self, status, message):
+        self.message = message
+        self.status = status
+    def __str__(self):
+        return f"{self.status}: {self.message}"
+
 def get_cursor():
     con = sqlite3.connect("pageviews.db")
     return con.cursor()
@@ -28,7 +35,7 @@ def cached_download(path: str, url: str) -> bool:
                 cache_file.write(req.text)
             print("Download cached")  
         else:
-            raise Exception(f"Unable to download [({req.status_code}) {req.text}]")
+            raise DownloadError(status=req.status_code, message=f"Unable to download [{req.text}]")
 
     with open(cache_path, 'r') as cache_file:
         print(f"Reading from filesystem: {cache_path}")

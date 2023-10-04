@@ -1,5 +1,5 @@
 from temporalio import activity
-from database import cached_download
+from database import DownloadError, cached_download
 import json
 import os
 import requests
@@ -12,8 +12,8 @@ async def get_pageviews(date: str) -> list[dict]:
     url_prefix = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/"
     url = url_prefix + date.replace('-','/')
     path = f"pageviews/{date.replace('-','')}"
-    #print(activity.info())
-    doc = json.loads(cached_download(path, url))
+    cached_download(path, url)
+    doc = json.loads()
     return doc['items'][0]['articles'][:10]
 
 @activity.defn
@@ -38,6 +38,5 @@ async def get_article(title: str) -> str:
         return str(e)
     doc = json.loads(content)
     return json.dumps(doc['query']['pages'][0])[:250]
-
 
 

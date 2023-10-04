@@ -16,7 +16,14 @@ class WikipediaPageviews:
             get_pageviews, 
             date,
             task_queue = "wikipedia-pageviews",
-            start_to_close_timeout=timedelta(seconds=10)
+            start_to_close_timeout=timedelta(days=1),
+            retry_policy=RetryPolicy(
+                backoff_coefficient=10,
+                maximum_attempts=10,
+                initial_interval=timedelta(seconds=1),
+                maximum_interval=timedelta(hours=24),
+                non_retryable_error_types=["DownloadError"],
+            )
         )
         filtered_articles = await workflow.execute_activity(
             "filter_articles", 
