@@ -11,10 +11,10 @@ async def get_client():
 
 async def main_wikipedia():
     client = await get_client()
-    start_date = datetime.date(2015,1,1)
+    start_date = datetime.date(2016,1,1)
     end_date = datetime.date(2023,10,4)
     date_range = [
-        datetime.date(2015,1,1) + datetime.timedelta(days=x) 
+        start_date + datetime.timedelta(days=x) 
         for x in range(0, (end_date - start_date).days)
     ]
     for d in date_range:
