@@ -12,8 +12,8 @@ async def get_pageviews(date: str) -> list[dict]:
     url_prefix = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/"
     url = url_prefix + date.replace('-','/')
     path = f"pageviews/{date.replace('-','')}"
-    cached_download(path, url)
-    doc = json.loads()
+    s = cached_download(path, url)
+    doc = json.loads(s)
     return doc['items'][0]['articles'][:10]
 
 @activity.defn
