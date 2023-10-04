@@ -31,3 +31,8 @@ hs_err_pid*
 .lsp/.cache/db.transit.json
 client-cert.pem
 client-private-key.pem
+jupyter/.ipynb_checkpoints/wikipedia-checkpoint.ipynb
+sh/nohup.out
+nohup.out
+jupyter/.ipynb_checkpoints/nohup-checkpoint.out
+.gitignore
