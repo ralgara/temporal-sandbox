@@ -6,6 +6,25 @@ from temporalio.common import RetryPolicy
 with workflow.unsafe.imports_passed_through():
     from activities import *
     from time import *
+
+@workflow.defn
+class Helo:
+    @workflow.run
+    async def run(self, page: str) -> dict:
+        print(f"Helo.run({page})")
+        articles = await workflow.execute_activity(
+            get_pageviews, 
+            page,
+            task_queue = "wikipedia-helo",
+            start_to_close_timeout=timedelta(days=1),
+            retry_policy=RetryPolicy(
+                backoff_coefficient=10,
+                maximum_attempts=10,
+                initial_interval=timedelta(seconds=1),
+                maximum_interval=timedelta(hours=24),
+                non_retryable_error_types=["ApplicationError"],
+            )
+        )        
     
 @workflow.defn
 class WikipediaPageviews:

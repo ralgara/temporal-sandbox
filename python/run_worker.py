@@ -57,14 +57,21 @@ async def main():
                 client, 
                 task_queue=queue,
                 workflows = [WikipediaPageviews],
-                activities=None)            
+                activities=None)
+        elif os.environ['TEMPORAL_WORKER_ROLE'] == 'helo':
+            queue="wikipedia-helo"
+            print(f"Starting helo worker [{queue}]")
+            w = Worker(
+                client, 
+                task_queue = queue,
+                workflows = [Helo],
+                activities = [get_pageviews, get_article],
+            )
         else:
             print(f"Invalid value in $TEMPORAL_WORKER_ROLE: {os.environ['TEMPORAL_WORKER_ARTICLE']}")
             sys.exit(1)
-        
-        # pdb.set_trace()
-        # print(w.config())
         await w.run()
+
     else:
         print(f"Required $TEMPORAL_WORKER_ROLE is undefined")
         sys.exit(1)
