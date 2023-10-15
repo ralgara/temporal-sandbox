@@ -1,0 +1,17 @@
+{
+   "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "temporal-py-worker-pageviews",
+            "type": "python",
+            "request": "launch",
+            "program": "python/run_worker.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "TEMPORAL_WORKER_ROLE": "pageviews"
+            }
+        }
+    ]
+}

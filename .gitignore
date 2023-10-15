@@ -24,10 +24,12 @@ hs_err_pid*
 .clj-kondo/.cache/v1/lock
 **/python/**/__pycache__/**
 **/python/env/**
+**/python/bin/**
+**/python/lib/**
 **/pkg/mod/cache/lock
 **/golang/go.sum
-**/python/pageviews.db
-**/python/cache/*
+**/pageviews.db
+**/cache/*
 .lsp/.cache/db.transit.json
 client-cert.pem
 client-private-key.pem
