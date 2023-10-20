@@ -1,7 +1,13 @@
 {
    "version": "0.2.0",
     "configurations": [
-
+        {
+            "name": "Run Go file",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${file}"
+        },
         {
             "name": "temporal-py-worker-pageviews",
             "type": "python",
@@ -11,6 +17,18 @@
             "justMyCode": true,
             "env": {
                 "TEMPORAL_WORKER_ROLE": "pageviews"
+            }
+        },
+        {
+            "name": "temporal-py-wf-import",
+            "type": "python",
+            "request": "launch",
+            "program": "python/run_workflow.py",
+            "args": ["--name=imoport"],
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "TEMPORAL_WORKFLOW": "import"
             }
         }
     ]
