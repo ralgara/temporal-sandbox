@@ -38,3 +38,6 @@ sh/nohup.out
 nohup.out
 jupyter/.ipynb_checkpoints/nohup-checkpoint.out
 .gitignore
+bin/**
+lib/**
+pyvenv.cfg
