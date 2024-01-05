@@ -1,0 +1,58 @@
+version: '2'
+services:
+  debug:
+    image: temporal-python-worker:latest
+    command: ['sh','-c','while true; do sleep 100; done']
+    network_mode: "host"
+
+  activity-pageviews:
+    image: temporal-python-worker:latest
+    command:
+    - python
+    - ./run_worker.py
+    working_dir: /app/python
+    environment:
+    - TEMPORAL_WORKER_ROLE=pageviews
+    - TEMPORAL_SERVER=host.docker.internal:7233
+    network_mode: "host"
+    volumes:
+      - .:/app
+
+  activity-article:
+    image: temporal-python-worker:latest
+    command:
+    - python
+    - ./run_worker.py
+    working_dir: /app/python
+    environment:
+    - TEMPORAL_WORKER_ROLE=article
+    - TEMPORAL_SERVER=host.docker.internal:7233
+    network_mode: "host"
+    volumes:
+    - .:/app
+
+  workflow-pageviews:
+    image: temporal-python-worker:latest
+    command:
+    - python
+    - ./run_workflow.py
+    working_dir: /app/python
+    environment:
+    - TEMPORAL_WORKER_ROLE=workflow-pageviews
+    - TEMPORAL_SERVER=host.docker.internal:7233
+    network_mode: "host"
+    volumes:
+    - .:/app
+
+  # workflow-import:
+  #   image: temporal-python-worker:latest
+  #   command:
+  #   - python
+  #   - ./run_worker.py
+  #   working_dir: /app/python
+  #   environment:
+  #   - TEMPORAL_WORKER_ROLE=workflow-import
+  #   - TEMPORAL_SERVER=host.docker.internal:7233
+  #   network_mode: "host"
+  #   volumes:
+  #   - .:/app

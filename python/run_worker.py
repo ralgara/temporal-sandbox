@@ -12,14 +12,18 @@ from workflows import *
 
 async def main():
     print(f"Starting worker [{os.environ['TEMPORAL_WORKER_ROLE']}]")
-    client = await Client.connect("localhost:7233", namespace="default")
+    server_addr = os.getenv('TEMPORAL_SERVER')
+    if server_addr is None:
+        print("$TEMPORAL_SERVER is required but undefined")
+        sys.exit(1)
+    print(f"Connecting to Temporal server at {server_addr}")
+    client = await Client.connect(server_addr, namespace="default")
 
     # with open("/Users/ralgara/code/temporal-sandbox/client-cert.pem", "rb") as certFile:
     #     client_cert = certFile.read()
 
     # with open("/Users/ralgara/code/temporal-sandbox/client-private-key.pem", "rb") as privateKeyFile:
     #     client_private_key = privateKeyFile.read()
-    
     print(f"Connected to server [{client.identity}]")
     if 'TEMPORAL_WORKER_ROLE' in os.environ:
         if os.environ['TEMPORAL_WORKER_ROLE'] == 'pageviews':
@@ -68,7 +72,7 @@ async def main():
                 activities = [get_pageviews, get_article],
             )
         else:
-            print(f"Invalid value in $TEMPORAL_WORKER_ROLE: {os.environ['TEMPORAL_WORKER_ARTICLE']}")
+            print(f"Invalid value in $TEMPORAL_WORKER_ROLE: {os.environ['TEMPORAL_WORKER_ROLE']}")
             sys.exit(1)
         await w.run()
 

@@ -41,3 +41,4 @@ jupyter/.ipynb_checkpoints/nohup-checkpoint.out
 bin/**
 lib/**
 pyvenv.cfg
+table.txt

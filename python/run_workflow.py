@@ -1,13 +1,28 @@
 import asyncio
 import datetime
+import os
+import sys
 
 from run_worker import WikipediaPageviews
 
 from temporalio.client import Client
 
 async def get_client():
-    print("Connecting to Temporal server")
-    return await Client.connect("localhost:7233")
+    print(f"Starting worker [{os.environ['TEMPORAL_WORKER_ROLE']}]")
+    server_addr = os.getenv('TEMPORAL_SERVER')
+    if server_addr is None:
+        print("$TEMPORAL_SERVER is required but undefined")
+        sys.exit(1)
+    print(f"Connecting to Temporal server at {server_addr}")
+    client = await Client.connect(server_addr, namespace="default")
+
+    # with open("/Users/ralgara/code/temporal-sandbox/client-cert.pem", "rb") as certFile:
+    #     client_cert = certFile.read()
+
+    # with open("/Users/ralgara/code/temporal-sandbox/client-private-key.pem", "rb") as privateKeyFile:
+    #     client_private_key = privateKeyFile.read()
+    print(f"Connected to server [{client.identity}]")
+    return client
 
 async def main_wikipedia():
     client = await get_client()
