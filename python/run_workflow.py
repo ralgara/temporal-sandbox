@@ -32,6 +32,7 @@ async def main_wikipedia():
         start_date + datetime.timedelta(days=x) 
         for x in range(0, (end_date - start_date).days)
     ]
+    print(f"Looping over date range [{date_range}]")
     for d in date_range:
 
         print(f"Starting workflow {d}")
@@ -48,6 +49,9 @@ async def main_wikipedia():
         print(f"Finished running workflow {id}")
 
 if __name__ == "__main__":
+    print("----------------------")
+    print(f"{sys.argv}")
+    print("----------------------")
     asyncio.run(main_wikipedia())
 
 
