@@ -35,10 +35,10 @@ services:
     image: temporal-python-worker:latest
     command:
     - python
-    - ./run_workflow.py
+    - ./run_worker.py
     working_dir: /app/python
     environment:
-    - TEMPORAL_WORKER_ROLE=workflow-pageviews
+    - TEMPORAL_WORKER_ROLE=workflow
     - TEMPORAL_SERVER=host.docker.internal:7233
     network_mode: "host"
     volumes:
