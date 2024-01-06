@@ -42,3 +42,4 @@ bin/**
 lib/**
 pyvenv.cfg
 table.txt
+golang/temporal-one/worker
