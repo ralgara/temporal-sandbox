@@ -31,7 +31,7 @@ services:
     volumes:
     - .:/app
 
-  workflow-pageviews:
+  workflow:
     image: temporal-python-worker:latest
     command:
     - python
@@ -39,6 +39,18 @@ services:
     working_dir: /app/python
     environment:
     - TEMPORAL_WORKER_ROLE=workflow
+    - TEMPORAL_SERVER=host.docker.internal:7233
+    network_mode: "host"
+    volumes:
+    - .:/app
+
+  activity-filter:
+    image: temporal-python-worker:latest
+    command:
+    - ./worker
+    working_dir: /app/golang/temporal-one
+    environment:
+    - TEMPORAL_WORKER_ROLE=filter
     - TEMPORAL_SERVER=host.docker.internal:7233
     network_mode: "host"
     volumes:
