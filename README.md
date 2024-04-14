@@ -1,6 +1,18 @@
 # temporal-sandbox
 
-Temporary repo for discussion with Temporal team. Objective: demo cross-language activities within a single workflow.
+Temporal demo. Objective: demo cross-language activities within a single workflow. Application is a Wikipedia sampler driven by pageviews, downloading the top N articles. Intended for information trend analysis.
+
+## Quick start
+1. Start Temporal server
+```
+nohup temporal server start-dev &
+```
+
+2. Start application stack
+```
+docker compose up
+```
+
 
 # Requirements
 * Python

@@ -31,19 +31,6 @@ services:
     volumes:
     - .:/app
 
-  workflow:
-    image: temporal-python-worker:latest
-    command:
-    - python
-    - ./run_worker.py
-    working_dir: /app/python
-    environment:
-    - TEMPORAL_WORKER_ROLE=workflow
-    - TEMPORAL_SERVER=host.docker.internal:7233
-    network_mode: "host"
-    volumes:
-    - .:/app
-
   activity-filter:
     image: temporal-python-worker:latest
     command:
@@ -56,15 +43,67 @@ services:
     volumes:
     - .:/app
 
-  # workflow-import:
-  #   image: temporal-python-worker:latest
-  #   command:
-  #   - python
-  #   - ./run_worker.py
-  #   working_dir: /app/python
-  #   environment:
-  #   - TEMPORAL_WORKER_ROLE=workflow-import
-  #   - TEMPORAL_SERVER=host.docker.internal:7233
-  #   network_mode: "host"
-  #   volumes:
-  #   - .:/app
+  activity-import:
+    image: temporal-python-worker:latest
+    command:
+    - python
+    - ./run_worker.py
+    working_dir: /app/python
+    environment:
+    - TEMPORAL_WORKER_ROLE=workflow-import
+    - TEMPORAL_SERVER=host.docker.internal:7233
+    network_mode: "host"
+    volumes:
+    - .:/app
+
+  workflow-download:
+    image: temporal-python-worker:latest
+    command:
+    - python
+    - ./run_worker.py
+    working_dir: /app/python
+    environment:
+    - TEMPORAL_WORKER_ROLE=workflow-download
+    - TEMPORAL_SERVER=host.docker.internal:7233
+    network_mode: "host"
+    volumes:
+    - .:/app
+
+  workflow-import:
+    image: temporal-python-worker:latest
+    command:
+    - python
+    - ./run_worker.py
+    working_dir: /app/python
+    environment:
+    - TEMPORAL_WORKER_ROLE=workflow-import
+    - TEMPORAL_SERVER=host.docker.internal:7233
+    network_mode: "host"
+    volumes:
+    - .:/app
+
+  control-download:
+    image: temporal-python-worker:latest
+    command:
+    - python
+    - ./run_workflow.py
+    working_dir: /app/python
+    environment:
+    - TEMPORAL_WORKER_ROLE=workflow-download
+    - TEMPORAL_SERVER=host.docker.internal:7233
+    network_mode: "host"
+    volumes:
+    - .:/app
+
+  control-import:
+    image: temporal-python-worker:latest
+    command:
+    - python
+    - ./run_workflow.py
+    working_dir: /app/python
+    environment:
+    - TEMPORAL_WORKER_ROLE=workflow-import
+    - TEMPORAL_SERVER=host.docker.internal:7233
+    network_mode: "host"
+    volumes:
+    - .:/app

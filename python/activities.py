@@ -1,10 +1,20 @@
 from temporalio import activity
-from database import DownloadError, cached_download
+from database import DownloadError, cached_download, get_pageviews_generator
 import json
 import os
 import requests
 import datetime
 import pdb
+
+@activity.defn
+async def import_pageviews(doc: dict) -> str:
+    print(f"import_pageviews({date})")
+    url_prefix = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/"
+    url = url_prefix + date.replace('-','/')
+    path = f"pageviews/{date.replace('-','')}"
+    s = cached_download(path, url)
+    doc = json.loads(s)
+    return doc['items'][0]['articles'][:10]
 
 @activity.defn
 async def get_pageviews(date: str) -> list[dict]:

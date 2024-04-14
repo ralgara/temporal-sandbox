@@ -62,4 +62,27 @@ class WikipediaPageviews:
             "status": "complete",
             "articles": filtered_articles
         }
+
+@workflow.defn
+class WikipediaImportPageviews:
+    @workflow.run
+    async def run(self, doc: dict) -> dict:
+        print(f"WikipediaImportPageviews.run(?)")
+        articles = await workflow.execute_activity(
+            import_pageviews, 
+            doc,
+            task_queue = "wikipedia-import-pageviews",
+            start_to_close_timeout=timedelta(days=1),
+            retry_policy=RetryPolicy(
+                backoff_coefficient=10,
+                maximum_attempts=10,
+                initial_interval=timedelta(seconds=1),
+                maximum_interval=timedelta(hours=24),
+                non_retryable_error_types=["DownloadError"],
+            )
+        )
+        return {
+            "status": "complete",
+            "articles": filtered_articles
+        }
         

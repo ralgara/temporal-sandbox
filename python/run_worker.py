@@ -9,6 +9,7 @@ from temporalio.worker import Worker
 
 from activities import *
 from workflows import *
+import database
 
 async def main():
     print(f"Starting worker [{os.environ['TEMPORAL_WORKER_ROLE']}]")
@@ -18,11 +19,7 @@ async def main():
         sys.exit(1)
     print(f"Connecting to Temporal server at {server_addr}")
     client = await Client.connect(server_addr, namespace="default")
-    # with open("/Users/ralgara/code/temporal-sandbox/client-cert.pem", "rb") as certFile:
-    #     client_cert = certFile.read()
-
-    # with open("/Users/ralgara/code/temporal-sandbox/client-private-key.pem", "rb") as privateKeyFile:
-    #     client_private_key = privateKeyFile.read()
+    database.initialize()
     print(f"Connected to server [{client.identity}]")
     print("----------------")
     if 'TEMPORAL_WORKER_ROLE' in os.environ:
@@ -54,14 +51,22 @@ async def main():
                 task_queue=queue,
                 workflows = None,
                 activities=[filter_articles])
-        elif os.environ['TEMPORAL_WORKER_ROLE'] == 'workflow':
+        elif os.environ['TEMPORAL_WORKER_ROLE'] == 'workflow-download':
             queue="wikipedia-pageviews"
-            print(f"Starting pageviews workflow [{queue}]")
+            print(f"Starting workflow worker [{queue}]")
             w = Worker(
                 client, 
                 task_queue=queue,
                 workflows = [WikipediaPageviews],
                 activities=None)
+        elif os.environ['TEMPORAL_WORKER_ROLE'] == 'workflow-import':
+            queue="wikipedia-import-pageviews"
+            print(f"Starting workflow worker [{queue}]")
+            w = Worker(
+                client, 
+                task_queue=queue,
+                workflows = [WikipediaImportPageviews],
+                activities=None)            
         elif os.environ['TEMPORAL_WORKER_ROLE'] == 'helo':
             queue="wikipedia-helo"
             print(f"Starting helo worker [{queue}]")
